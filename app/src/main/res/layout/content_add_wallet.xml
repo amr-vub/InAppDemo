@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/appbk"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.aga.myapplication.addWallet"
+    tools:showIn="@layout/activity_add_wallet">
+
+    <EditText
+        android:id="@+id/cardNbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="94dp"
+        android:ems="10"
+        android:hint="Card Number"
+        android:inputType="textPersonName|number"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="47dp"
+        android:layout_marginStart="47dp" />
+
+    <EditText
+        android:id="@+id/crdAlias"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cardNbr"
+        android:layout_alignStart="@+id/cardNbr"
+        android:layout_below="@+id/cardNbr"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Card Aliase"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/expiryDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/crdCsc"
+        android:layout_alignStart="@+id/crdCsc"
+        android:layout_below="@+id/crdCsc"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="ExpiryDate: YYYYMM"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/WlBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Add Wallet"
+        android:layout_below="@+id/expiryDate"
+        android:layout_alignRight="@+id/expiryDate"
+        android:layout_alignEnd="@+id/expiryDate"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+
+    <TextView
+        android:id="@+id/addWlResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/WlBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp" />
+
+    <EditText
+        android:id="@+id/crdCsc"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/crdAlias"
+        android:layout_alignStart="@+id/crdAlias"
+        android:layout_below="@+id/crdAlias"
+        android:ems="10"
+        android:hint="CSC"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/payMeans"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_above="@+id/crdCsc"
+        android:layout_toRightOf="@+id/crdAlias"
+        android:layout_toEndOf="@+id/crdAlias" />
+
+    <ImageView
+        android:id="@+id/brandPic"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/expiryDate"
+        android:layout_toEndOf="@+id/crdAlias"
+        android:layout_toRightOf="@+id/crdAlias"
+        app:srcCompat="@drawable/mastercard" />
+</RelativeLayout>

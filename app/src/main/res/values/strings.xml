@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">InAppDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_wlorder">Wallet Order</string>
+    <string name="title_activity_android_pay">AndroidPay</string>
+    <string name="title_activity_three_ds">ThreeDS</string>
+    <string-array name="paymentMeans_array">
+        <item>Payment brand</item>
+        <item>MASTERCARD</item>
+        <item>VISA</item>
+        <item>MAESTRO</item>
+        <item>VPAY</item>
+    </string-array>
+    <string name="title_activity_add_wallet">addWallet</string>
+</resources>

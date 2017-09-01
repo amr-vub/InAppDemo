@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.aga.myapplication"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -28,5 +28,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-wallet:9.4.0'
     compile 'com.android.support:support-v4:24.1.1'
+    compile 'io.card:android-sdk:5.5.0'
     testCompile 'junit:junit:4.12'
 }

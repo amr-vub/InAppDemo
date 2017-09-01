@@ -59,6 +59,7 @@ public class addWallet extends AppCompatActivity implements AdapterView.OnItemSe
         setContentView(R.layout.activity_add_wallet);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -133,19 +134,6 @@ public class addWallet extends AppCompatActivity implements AdapterView.OnItemSe
                 cardNumber.setText(scanResult.cardNumber);
                 // Do something with the raw number, e.g.:
                 // myService.setCardNumber( scanResult.cardNumber );
-
-                if (scanResult.isExpiryValid()) {
-                    resultDisplayStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
-                }
-
-                if (scanResult.cvv != null) {
-                    // Never log or display a CVV
-                    resultDisplayStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
-                }
-
-                if (scanResult.postalCode != null) {
-                    resultDisplayStr += "Postal Code: " + scanResult.postalCode + "\n";
-                }
             }
             else {
                 resultDisplayStr = "Scan was canceled.";

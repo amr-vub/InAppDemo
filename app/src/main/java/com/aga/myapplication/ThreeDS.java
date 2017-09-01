@@ -34,6 +34,9 @@ import com.wl.sips.inapp.sdk.pojo.PaymentProviderResponse;
 
 import java.net.URLEncoder;
 
+import io.card.payment.CardIOActivity;
+import io.card.payment.CreditCard;
+
 import static android.R.attr.data;
 import static android.R.attr.drawable;
 import static com.aga.myapplication.R.id.textView;
@@ -44,7 +47,7 @@ public class ThreeDS extends AppCompatActivity implements AdapterView.OnItemSele
     EditText cardNbr;
     EditText expirayData;
     EditText csc;
-    Button pay;
+    Button pay, scan;
     Spinner spinner;
     RedirectionResponse redirectionResponse = null;
     OrderResponse cardValidateAuthenticationAndOrderResponse = null;
@@ -89,6 +92,15 @@ public class ThreeDS extends AppCompatActivity implements AdapterView.OnItemSele
         cardNbr = (EditText) findViewById(R.id.crdNbr);
         expirayData = (EditText) findViewById(R.id.expiryDate);
         csc = (EditText) findViewById(R.id.csc);
+
+        scan = (Button) findViewById(R.id.scan);
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onScanPress(v);
+            }
+        });
 
         pay = (Button) findViewById(R.id.py3ds);
 
@@ -140,6 +152,14 @@ public class ThreeDS extends AppCompatActivity implements AdapterView.OnItemSele
                 break;
             case 3: pay.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.vpay));
                 break;
+        }
+        if(PaymentBrand == "MASTERCARD" || PaymentBrand == "VISA")
+        {
+            scan.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            scan.setVisibility(View.GONE);
         }
     }
 
@@ -245,6 +265,42 @@ public class ThreeDS extends AppCompatActivity implements AdapterView.OnItemSele
                         , Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void onScanPress(View v) {
+        Intent scanIntent = new Intent(this, CardIOActivity.class);
+
+        // customize these values to suit your needs.
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, false); // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false); // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
+
+        // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+        startActivityForResult(scanIntent, 5);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 5) {
+            String resultDisplayStr;
+            if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
+
+                // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
+                resultDisplayStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
+                cardNbr.setText(scanResult.cardNumber);
+                // Do something with the raw number, e.g.:
+                // myService.setCardNumber( scanResult.cardNumber );
+            }
+            else {
+                resultDisplayStr = "Scan was canceled.";
+            }
+            // do something with resultDisplayStr, maybe display it in a textView
+            // resultTextView.setText(resultDisplayStr);
+            System.out.println("--------------" + resultDisplayStr);
+        }
+        // else handle other activity results
     }
 
     @Override

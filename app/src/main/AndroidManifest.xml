@@ -47,6 +47,10 @@
         <activity
             android:name=".addWallet"
             android:label="@string/title_activity_add_wallet"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BCActivity"
+            android:label="@string/title_activity_bc"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

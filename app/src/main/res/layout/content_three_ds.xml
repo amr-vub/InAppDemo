@@ -94,4 +94,15 @@
         android:hint="cvv"
         android:inputType="number" />
 
+    <Button
+        android:id="@+id/scan"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/expiryDate"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/scan" />
+
 </RelativeLayout>

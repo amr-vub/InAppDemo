@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,48 +15,21 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.wl.sips.inapp.sdk.PaymentManager;
-import com.wl.sips.inapp.sdk.exception.NetworkException;
-import com.wl.sips.inapp.sdk.exception.TechnicalException;
 import com.wl.sips.inapp.sdk.pojo.AddCardResponse;
 import com.wl.sips.inapp.sdk.pojo.GetTransactionDataResponse;
-import com.wl.sips.inapp.sdk.pojo.OrderResponse;
 import com.wl.sips.inapp.sdk.pojo.PaymentProviderResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import static android.R.id.message;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
-import static com.aga.myapplication.NW.httpURLConnection;
-import static com.aga.myapplication.NW.post_WL;
-import static com.aga.myapplication.Payment.addCard;
-import static com.aga.myapplication.R.id.editText;
-import static com.aga.myapplication.R.id.textView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
 
@@ -106,31 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
         //PaymentManager
 
-        amount = (TextView) findViewById(editText);
-
-        amount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // amount.setText("");
-            }
-        });
-
-        Button payButton = (Button) findViewById(R.id.button);
+        Button payButton = (Button) findViewById(R.id.bcBtn);
         Button WlOrder = (Button) findViewById(R.id.WlPay);
         Button btn3ds = (Button) findViewById(R.id.btn3ds);
 
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (amount.getText().toString().equals("")) {
-
-                    Toast.makeText(getApplicationContext(), "Please insert an amount", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                AsynctT asyncT = new AsynctT();
-                asyncT.execute();
-
-                Toast.makeText(getApplicationContext(), "Please wait...redirecting to BC App", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, BCActivity.class));
             }
         });
 
@@ -147,13 +103,7 @@ public class MainActivity extends AppCompatActivity {
         WlOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //sendJSONreq();
-                Intent intent = new Intent(MainActivity.this, WLOrderActivity.class);
-                EditText editText = (EditText) findViewById(R.id.editText);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);
-                //startActivity();
+                startActivity(new Intent(MainActivity.this, WLOrderActivity.class));
             }
         });
 /*
@@ -231,63 +181,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class AsynctT extends AsyncTask<Void, Void, Void> {
-
-        String text = "";
-
-        // String dataIn;
-        Gson gson = new Gson();
-
-        //HttpsURLConnection httpURLConnection;
-
-        // MainActivity mainActivity;
-        @Override
-        protected Void doInBackground(Void... params) {
-            System.out.println(getTxtLen(amount));
-
-            redirectionResponse = NW.post_BC(getTxt(amount).toString(), "BCMCMOBILE", "PAYMENTPROVIDERORDER");
-            //redirectionResponse =  NW.post_WL();
-
-            paymentProviderResponse = Payment.paymentProviderOrder(getApplicationContext(), redirectionResponse);
-            // addCardResponse = Payment.addCard(getApplicationContext(),"", "","" ,redirectionResponse);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void o) {
-            //amount.setText(redirectionResponse.getRedirectionUrl());
-            if (redirectionResponse == null || redirectionResponse.getRedirectionStatusCode() != 0) {
-                if (redirectionResponse != null) {
-                    Toast.makeText(getApplicationContext(),"Response code: " + redirectionResponse.getRedirectionStatusCode() + " \nStatusMessage: " + redirectionResponse.getRedirectionStatusMessage()
-                    , Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-            String uri = Uri.parse(paymentProviderResponse.getOuterRedirectionUrl()).toString();
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            startActivity(browserIntent);
-            /*
-            String uri = Uri.parse(redirectionResponse.getRedirectionUrl())
-                    .buildUpon()
-                    .appendQueryParameter("redirectionData", redirectionResponse.getRedirectionData())
-                    .appendQueryParameter("redirectionVersion", redirectionResponse.getRedirectionVersion() )
-                    .build().toString();
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            startActivity(browserIntent);
-            */
-        }
-
-        protected CharSequence getTxt(TextView v) {
-            return v.getText();
-        }
-
-        protected int getTxtLen(TextView v) {
-            return v.getText().length();
-        }
-
-
-    }
 
     private class SecondAsyncTask extends AsyncTask<Void, Void, Void> {
 

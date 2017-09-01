@@ -100,8 +100,8 @@
         style="@android:style/Widget.DeviceDefault.Light.Button.Inset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SCAN"
-        android:layout_alignTop="@+id/cardNbr"
+        android:layout_alignBottom="@+id/cardNbr"
+        android:layout_toEndOf="@+id/cardNbr"
         android:layout_toRightOf="@+id/cardNbr"
-        android:layout_toEndOf="@+id/cardNbr" />
+        android:background="@drawable/scan" />
 </RelativeLayout>

@@ -12,4 +12,5 @@
         <item>VPAY</item>
     </string-array>
     <string name="title_activity_add_wallet">addWallet</string>
+    <string name="title_activity_bc">BCActivity</string>
 </resources>

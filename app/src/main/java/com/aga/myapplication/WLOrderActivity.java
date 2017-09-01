@@ -232,7 +232,7 @@ public class WLOrderActivity extends AppCompatActivity {
         });
         tr.addView(checkBox);
 
-        // adding listner to selections
+        // adding listener to selections
 
         ImageView imageView = new ImageView(getApplicationContext());
         //imageView.setPadding(50, 50, 50, 50);

@@ -3,6 +3,9 @@ package com.aga.myapplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import static com.aga.myapplication.R.id.amount;
 import static com.wl.sips.inapp.sdk.enums.SdkOperation.WALLETORDER;
 
@@ -14,8 +17,12 @@ import static com.wl.sips.inapp.sdk.enums.SdkOperation.WALLETORDER;
  */
 public class Encode {
 
-    static String secretKey = "";
-    static String merchantId = "";
+    static String secretKey = "" ;
+    static String merchantId = "" ;
+    static Calendar c = Calendar.getInstance();
+
+    static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+    static String formattedDate = df.format(c.getTime());
 
     public static JSONObject encodeInitializeOrder(String amount, String paymentMeanBrand, String sdkOperationName )
     {
@@ -29,14 +36,14 @@ public class Encode {
         //String normalReturnUrl =  "http://localhost/www/public/Start.php";
         try {
             jsonObjTxRef.put("s10TransactionId", txRef);
-            jsonObjTxRef.put("s10TransactionIdDate", "20170817");
+            jsonObjTxRef.put("s10TransactionIdDate", formattedDate);
 
             jsonObject.put("amount", amount);
             jsonObject.put("captureMode", "VALIDATION");
             jsonObject.put("currencyCode", "978");
             jsonObject.put("interfaceVersion", interfaceVersionInApp);
             jsonObject.put("keyVersion", "1");
-            jsonObject.put("merchantId", merchantId);// 225005008580001 //002001000000001
+            jsonObject.put("merchantId", merchantId);
             //jsonObject.put("normalReturnUrl", normalReturnUrl);
             //jsonObject.put("orderChannel", "INTERNET");
             jsonObject.put("paymentMeanBrand", paymentMeanBrand);
@@ -52,7 +59,7 @@ public class Encode {
 
             //System.out.println(Math.floor(Math.random() * 244532656));
 
-            String dataIn = amount + "VALIDATION" +"978"+ interfaceVersionInApp +"225005008580001"+ paymentMeanBrand +txRef + "20170817" + sdkOperationName +"SDK100";//+txRef;
+            String dataIn = amount + "VALIDATION" + "978"+ interfaceVersionInApp +merchantId+ paymentMeanBrand + txRef + formattedDate + sdkOperationName +"SDK100";//+txRef;
 
             jsonObject.put("seal", ExampleHMAC.computeSeal(dataIn, secretKey));
 
@@ -78,7 +85,7 @@ public class Encode {
         //String normalReturnUrl =  "http://localhost/www/public/Start.php";
         try {
             jsonObjTxRef.put("s10TransactionId", txRef);
-            jsonObjTxRef.put("s10TransactionIdDate", "20170802");
+            jsonObjTxRef.put("s10TransactionIdDate", formattedDate);
 
             jsonObjfraudData.put("bypass3DS", "MERCHANTWALLET");
 
@@ -88,7 +95,7 @@ public class Encode {
             //jsonObject.put("fraudData", jsonObjfraudData);
             jsonObject.put("interfaceVersion", interfaceVersionInApp);
             jsonObject.put("keyVersion", "1");
-            jsonObject.put("merchantId", merchantId);// 225005008580001 //002001000000001
+            jsonObject.put("merchantId", merchantId);
             jsonObject.put("merchantWalletId", wlID);
             //jsonObject.put("normalReturnUrl", normalReturnUrl);
             //jsonObject.put("orderChannel", "INTERNET");
@@ -100,12 +107,12 @@ public class Encode {
             jsonObject.put("sdkOperationName", "WALLETORDER");
             jsonObject.put("sdkVersion", "SDK100");
             //jsonObject.put("templateName", "marc");
-            //jsonObject.put("transactionReference", txRef);
+            ///jsonObject.put("transactionReference", txRef);
 
 
             //System.out.println(Math.floor(Math.random() * 244532656));
 
-            String dataIn = amount + "VALIDATION" + "978"+ /*"MERCHANTWALLET" +*/ interfaceVersionInApp +"225005008580001"+ wlID + "MASTERCARD" + txRef + "20170802" + "WALLETORDER" +"SDK100";//+txRef;//"BCMCMOBILE" +
+            String dataIn = amount + "VALIDATION" + "978"+ /*"MERCHANTWALLET" +*/ interfaceVersionInApp +merchantId+ wlID + "MASTERCARD" + txRef + formattedDate + "WALLETORDER" +"SDK100";//+txRef;//"BCMCMOBILE" +
 
             jsonObject.put("seal", ExampleHMAC.computeSeal(dataIn, secretKey));
 
@@ -124,6 +131,8 @@ public class Encode {
         //String interfaceVersion = "IR_WS_2.10";
         String txRef = String.valueOf((int)Math.floor(Math.random() * 24456) );
 
+        System.out.println(formattedDate);
+
         //String S10Txref = "{s10TransactionId:1234, s10TransactionIdDate:20170802}";
         //JSONObject jsonObjTxRef = new JSONObject();
         //String normalReturnUrl =  "http://localhost/www/public/Start.php";
@@ -135,7 +144,7 @@ public class Encode {
             //jsonObject.put("currencyCode", "978");
             jsonObject.put("interfaceVersion", interfaceVersionInApp);
             jsonObject.put("keyVersion", "1");
-            jsonObject.put("merchantId", merchantId);// 225005008580001 //002001000000001
+            jsonObject.put("merchantId", merchantId);
             jsonObject.put("merchantWalletId", wlID);
             //jsonObject.put("orderChannel", "INTERNET");
             //jsonObject.put("paymentMeanBrand", "BCMCMOBILE");
@@ -151,7 +160,7 @@ public class Encode {
 
             //System.out.println(Math.floor(Math.random() * 244532656));
 
-            String dataIn = interfaceVersionInApp +"225005008580001"+ wlID + sdkOpName + "SDK100";//+txRef;
+            String dataIn = interfaceVersionInApp +merchantId+ wlID + sdkOpName + "SDK100";//+txRef;
 
             jsonObject.put("seal", ExampleHMAC.computeSeal(dataIn, secretKey));
 
